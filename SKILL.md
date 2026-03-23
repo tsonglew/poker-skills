@@ -1,164 +1,192 @@
 ---
-name: poker-games
-description: Play famous poker games in Claude Code. Triggers when user asks to play poker, blackjack, Texas Hold'em, or card games.
-version: 1.0.0
+name: poker-skills
+description: Play poker games in Claude Code. Triggers when user asks to play poker, blackjack, Texas Hold'em, Doudizhu (斗地主), Guandan (掼蛋), or card games.
+version: 1.1.0
 author: TsongLew <tsonglew@gmail.com>
 ---
 
-# 🃏 Poker Games
+# 🃏 Poker & Card Games Skills
 
-Play classic poker games directly in Claude Code!
+Play classic poker and Chinese card games directly in Claude Code!
 
-## Quick Start
+## Games
 
-Just say:
-- "Let's play poker"
-- "I want to play blackjack"
-- "Deal me in for Texas Hold'em"
+| Game | Type | Players | Run |
+|------|------|---------|-----|
+| **Blackjack** | 西方 | 1 vs Dealer | `python games/blackjack.py` |
+| **Texas Hold'em** | 西方 | 4+ | `python games/holdem.py` |
+| **Five Card Draw** | 西方 | 3+ | `python games/draw.py` |
+| **斗地主** | 中国 | 3 (1v2) | `python games/doudizhu.py` |
+| **掼蛋** | 中国 | 4 (2v2) | `python games/guandan.py` |
 
-## Available Games
+---
 
-### 🃏 Blackjack (21)
+## 🇨🇳 中国棋牌
 
-The classic casino card game!
+### 斗地主
+
+经典3人对战扑克游戏（1地主 vs 2农民）
+
+```
+python games/doudizhu.py
+```
+
+**规则：**
+- 54张牌（含大小王）
+- 每人17张，3张底牌归地主
+- 叫地主（1-3分）
+- 地主先出，目标先出完牌
+
+**牌型：**
+| 牌型 | 说明 |
+|------|------|
+| 单张 | 任意一张 |
+| 对子 | 两张相同 |
+| 三张 | 三张相同 |
+| 三带一/二 | 三张+单/对 |
+| 顺子 | 5+连续（不含2和王）|
+| 连对 | 3+连续对子 |
+| 飞机 | 2+连续三张 |
+| 炸弹 | 四张相同 |
+| 王炸 | 大小王 |
+
+**命令：**
+```
+bid 0-3      # 叫地主（0=不叫）
+play 0,1,2   # 出牌（索引）
+pass         # 不出
+cards        # 查看手牌索引
+```
+
+---
+
+### 掼蛋
+
+江苏省传统4人扑克游戏（2对2对抗）
+
+```
+python games/guandan.py
+```
+
+**规则：**
+- 108张牌（两副牌+4王）
+- 每人27张
+- 2队对抗，打完升级
+- 从2打到A通关
+
+**特色：**
+- 同花顺 > 炸弹
+- 6张+炸弹 > 同花顺
+- 王炸（四大天王）最大
+- 双下升3级
+
+**牌型：**
+| 牌型 | 说明 |
+|------|------|
+| 单张/对子/三张 | 基础牌型 |
+| 三带二 | 三张+一对 |
+| 顺子 | 5+连续（A最大）|
+| 连对 | 3+连续对子 |
+| 钢板 | 2+连续三张 |
+| 炸弹 | 4-8张相同 |
+| 同花顺 | 5+同花顺子 |
+| 四带二 | 四张+两单 |
+| 王炸 | 4张王 |
+
+**命令：**
+```
+play 0,1,2   # 出牌
+pass         # 不出
+cards        # 查看手牌
+deal         # 新一局
+```
+
+---
+
+## 🌍 西方扑克
+
+### Blackjack (21点)
 
 ```
 python games/blackjack.py
 ```
 
-**Rules:**
-- Get as close to 21 as possible without going over
-- Face cards (J, Q, K) = 10, Ace = 1 or 11
-- Dealer hits on 16, stands on 17
-- Natural blackjack (A + 10-value) pays 3:2
+**命令：** `deal [bet]`, `hit`, `stand`, `double`
 
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `deal [bet]` | Start new hand |
-| `hit` | Take another card |
-| `stand` | Keep current hand |
-| `double` | Double down (2x bet, 1 card) |
-
----
-
-### ♠ Texas Hold'em
-
-The world's most popular poker variant!
+### Texas Hold'em
 
 ```
 python games/holdem.py
 ```
 
-**Rules:**
-- 2 hole cards per player
-- 5 community cards (flop, turn, river)
-- Best 5-card hand wins
+**命令：** `deal`, `fold`, `check`, `call`, `raise [amount]`
 
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `deal` | Start a new hand |
-| `fold` | Give up your hand |
-| `check` | Pass without betting |
-| `call` | Match the current bet |
-| `raise [amount]` | Increase the bet |
-
----
-
-### 🎴 Five Card Draw
-
-Traditional draw poker!
+### Five Card Draw
 
 ```
 python games/draw.py
 ```
 
-**Rules:**
-- 5 cards dealt face down
-- One betting round
-- Discard up to 4 cards and draw new ones
-- Final betting round
-- Best hand wins
-
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `deal` | Start a new hand |
-| `fold` | Give up |
-| `call` | Match the bet |
-| `draw 0,2,4` | Discard cards at positions 0, 2, 4 |
-| `stand-pat` | Keep all cards |
+**命令：** `deal`, `fold`, `call`, `draw 0,2,4`, `stand-pat`
 
 ---
 
-## Hand Rankings
+## 牌型大小（通用）
 
-From highest to lowest:
+**西方扑克：**
+1. 🏆 皇家同花顺
+2. 🔥 同花顺
+3. 💪 四条
+4. 🏠 葫芦
+5. 💎 同花
+6. 📈 顺子
+7. 🎯 三条
+8. ✌️ 两对
+9. 👆 一对
+10. 🃏 高牌
 
-| Rank | Name | Example |
-|------|------|---------|
-| 1 | 🏆 Royal Flush | A♠ K♠ Q♠ J♠ 10♠ |
-| 2 | 🔥 Straight Flush | 9♣ 8♣ 7♣ 6♣ 5♣ |
-| 3 | 💪 Four of a Kind | K♠ K♥ K♦ K♣ 3♠ |
-| 4 | 🏠 Full House | Q♠ Q♥ Q♦ 7♣ 7♥ |
-| 5 | 💎 Flush | A♠ J♠ 8♠ 5♠ 2♠ |
-| 6 | 📈 Straight | 10♠ 9♥ 8♦ 7♣ 6♠ |
-| 7 | 🎯 Three of a Kind | 7♠ 7♥ 7♦ K♣ 2♠ |
-| 8 | ✌️ Two Pair | J♠ J♥ 4♦ 4♣ 9♠ |
-| 9 | 👆 One Pair | A♠ A♥ K♦ 7♣ 2♠ |
-| 10 | 🃏 High Card | A♠ K♥ 9♦ 7♣ 2♠ |
+**斗地主：** 王炸 > 炸弹 > 其他（同类型比点数，2最大）
 
----
-
-## Tips
-
-- Games track your chips between hands
-- AI opponents use basic strategy
-- Use `chips` command to check balance
-- Use `help` command for available actions
+**掼蛋：** 王炸 > 6张+炸弹 > 同花顺 > 炸弹 > 其他
 
 ---
 
-## Files Structure
+## 使用示例
+
+```
+你: 玩斗地主
+
+Claude: 
+═════════════════════════════════════════════════════════
+                    🃏 斗 地 主 🃏
+═════════════════════════════════════════════════════════
+  【叫地主阶段】 当前叫分: 无
+───────────────────────────────────────────────────────────
+→ 你(👨‍🌾农民): 3♠ 4♥ 5♣ 6♦ 7♠ 9♥ J♣ Q♦ K♠ A♥ 2♣
+  张三(👨‍🌾农民): [13张]
+  李四(👨‍🌾农民): [13张]
+───────────────────────────────────────────────────────────
+  命令: bid 0 (不叫) | bid 1-3 (叫分)
+═════════════════════════════════════════════════════════
+```
+
+---
+
+## 文件结构
 
 ```
 poker-skills/
-├── SKILL.md              # This file
-├── README.md             # Documentation
+├── SKILL.md
+├── README.md
 ├── lib/
-│   ├── cards.py          # Card & Deck utilities
-│   └── hands.py          # Hand evaluation
+│   ├── cards.py
+│   └── hands.py
 └── games/
-    ├── blackjack.py      # 21 game
-    ├── holdem.py         # Texas Hold'em
-    └── draw.py           # Five Card Draw
-```
-
----
-
-## Example Session
-
-```
-You: Let's play blackjack
-
-Claude: Starting blackjack game...
-
-╔══════════════════════════════════╗
-│          ♠ BLACKJACK ♠          │
-╠══════════════════════════════════╣
-│ Chips: 1000                      │
-╠══════════════════════════════════╣
-│ Dealer: [K♠ ??] = ?              │
-╠══════════════════════════════════╣
-│ → Hand 1: [A♥ 7♦] = 18          │
-╠══════════════════════════════════╣
-│ Commands: hit | stand | double   │
-╚══════════════════════════════════╝
-
-You: hit
-
-Claude: You draw 3♣ for 21! BLACKJACK!
+    ├── blackjack.py
+    ├── holdem.py
+    ├── draw.py
+    ├── doudizhu.py    # 斗地主
+    └── guandan.py     # 掼蛋
 ```
 
 ---
